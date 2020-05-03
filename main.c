@@ -15,6 +15,7 @@ int main(void){
     for(int i = 0; i < n_proc; i++){
         scanf("%s%d%d", proc[i].name, &proc[i].t_ready, &proc[i].t_exec);
         proc[i].pid = -1;
+        proc[i].timestamp = 0;
     }
 
     if(strcmp(str_policy, "FIFO") == 0){

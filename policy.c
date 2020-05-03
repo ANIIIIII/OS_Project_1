@@ -43,26 +43,28 @@ int PSJF_next(int proc_running){
 
 int RR_next(int proc_running){
 	int ret = -1;
-
-    if(pre_running == -1 && proc_running == -1){
+	if(proc_running == -1){
 		for(int i = 0; i < n_proc; i++){
-			if(proc[i].pid != -1 && proc[i].t_exec > 0){
+			if(proc[i].pid == -1 || proc[i].t_exec == 0){
+				continue;
+			}
+			if(ret == -1 || proc[ret].timestamp > proc[i].timestamp){
 				ret = i;
-				break;
 			}
 		}
-	}else if(proc_running == -1){
-        for(int i = 1; i <= n_proc; i++){
-			if(proc[(pre_running + i) % n_proc].pid != -1 && proc[(pre_running + i) % n_proc].t_exec > 0){
-				ret = (pre_running + i) % n_proc;
-				break;
+	}else if((time - lasttime) % TIME_Q == 0){
+		for(int i = 1; i <= n_proc; i++){
+			int j = (proc_running + i) % n_proc;
+			if(proc[j].pid == -1 || proc[j].t_exec == 0){
+				continue;
+			}
+			if(ret == -1 || proc[ret].timestamp > proc[j].timestamp){
+				ret = j;
 			}
 		}
-    }else if(time != lasttime && (time - lasttime) % TIME_Q == 0){
-		ret = (proc_running + 1) % n_proc;
-		while(proc[ret].pid == -1 || proc[ret].t_exec == 0)
-			ret = (ret + 1) % n_proc;
-    }else 
-        ret = proc_running;
+	}else
+		ret = proc_running;
+	
+	
 	return ret;
 }

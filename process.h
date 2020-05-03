@@ -13,6 +13,7 @@ struct process{
     char name[32];
     int t_ready;
     int t_exec;
+    int timestamp;
 };
 
 int n_proc;

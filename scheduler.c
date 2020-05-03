@@ -65,6 +65,7 @@ void scheduling(struct process *proc){
 			if(proc[i].t_ready == time){
 				proc[i].pid = proc_create(proc[i]);
 				proc_block(proc[i].pid);
+				proc[i].timestamp = time;
 			}
 		}
 
@@ -79,10 +80,12 @@ void scheduling(struct process *proc){
 		}
 
         UNIT_T();
-		
+		time++;
+
         if(proc_running != -1){
 			proc[proc_running].t_exec--;
+			proc[proc_running].timestamp = time;
         }
-		time++;
+		
     }
 }
